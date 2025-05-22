@@ -16,4 +16,10 @@ RSpec.describe TableTopBot::Table do
       expect(table.height).to eq 5
     end
   end
+
+  describe '#valid_position?' do
+    it 'returns true for valid position' do
+      expect(table.valid_position?(width: 0, height: 0)).to eq true
+    end
+  end
 end
