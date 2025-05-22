@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module TableTopBot
-  class HelloWorld
+  class Robot
     def hello
       'Hello World'
     end

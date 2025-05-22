@@ -9,7 +9,9 @@ RSpec.describe TableTopBot::Table do
     it 'returns correct width' do
       expect(table.width).to eq 5
     end
+  end
 
+  describe '#height' do
     it 'returns correct height' do
       expect(table.height).to eq 5
     end
