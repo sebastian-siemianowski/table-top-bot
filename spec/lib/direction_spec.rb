@@ -11,7 +11,7 @@ RSpec.describe TableTopBot::Direction do
     end
   end
 
-  describe '.turn_left' do
+  describe '#turn_left' do
     it 'turns left from NORTH to WEST' do
       expect(direction.turn_left('NORTH')).to eq('WEST')
     end
@@ -26,6 +26,24 @@ RSpec.describe TableTopBot::Direction do
 
     it 'turns left from EAST to NORTH' do
       expect(direction.turn_left('EAST')).to eq('NORTH')
+    end
+  end
+
+  describe '#turn_right' do
+    it 'turns right from NORTH to EAST' do
+      expect(direction.turn_right('NORTH')).to eq('EAST')
+    end
+
+    it 'turns right from EAST to SOUTH' do
+      expect(direction.turn_right('EAST')).to eq('SOUTH')
+    end
+
+    it 'turns right from SOUTH to WEST' do
+      expect(direction.turn_right('SOUTH')).to eq('WEST')
+    end
+
+    it 'turns right from WEST to NORTH' do
+      expect(direction.turn_right('WEST')).to eq('NORTH')
     end
   end
 
