@@ -2,6 +2,13 @@
 
 module TableTopBot
   class Direction
-    DIRECTIONS = %w[NORTH EAST SOUTH WEST].freeze
+    attr_reader :directions
+    def initialize
+      @directions = ['NORTH', 'EAST', 'SOUTH', 'WEST']
+    end
+
+    def self.valid?(direction)
+      @directions.include?(direction)
+    end
   end
 end
