@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require 'colorize'
+
 module TableTopBot
   module UIHelper
-    require 'colorize'
+    # The UIHelper module is a collection of simple tools (methods) to help make the
+    # program's text output more user-friendly and visually clear. It uses the 'colorize'
+    # gem to display different types of messages in different colors.
 
     def self.info(message, stream: $stdout)
       stream.puts message.colorize(:cyan)

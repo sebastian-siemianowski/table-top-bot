@@ -45,7 +45,16 @@ TableTopBot::UIHelper.info('    Quits the simulator.')
 TableTopBot::UIHelper.info('-------------------------------------------')
 
 simulator = TableTopBot::Simulator.new
-simulator.run
+
+loop do
+  TableTopBot::UIHelper.prompt('Enter command: ')
+  command_string_with_newline = $stdin.gets
+  break if command_string_with_newline.nil?
+
+  command_string = command_string_with_newline.strip
+  result = simulator.process_command(command_string)
+  break if result == :exit
+end
 
 TableTopBot::UIHelper.info('-------------------------------------------')
 TableTopBot::UIHelper.success('Exiting simulator. Goodbye!')
