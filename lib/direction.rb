@@ -16,9 +16,9 @@ module TableTopBot
       @directions[new_index]
     end
 
-    def self.turn_right(current_direction)
+    def turn_right(current_direction)
       current_index = @directions.index(current_direction)
-      return nil unless current_index # Should not happen with valid input
+      return nil unless current_index
 
       new_index = (current_index + 1) % @directions.length
       @directions[new_index]
