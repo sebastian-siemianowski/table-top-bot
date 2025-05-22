@@ -2,8 +2,10 @@
 
 module TableTopBot
   class Robot
-    def hello
-      'Hello World'
+    attr_reader :table
+
+    def initialize
+      @table = Table.new
     end
   end
 end
