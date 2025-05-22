@@ -9,10 +9,10 @@ module TableTopBot
       @height = 5
     end
 
-    def valid_position?(width:, height:)
-      width.is_a?(Integer) && height.is_a?(Integer) &&
-        width >= 0 && width < @width &&
-        height >= 0 && height < @height
+    def valid_position?(x_coordinate:, y_coordinate:)
+      x_coordinate.is_a?(Integer) && y_coordinate.is_a?(Integer) &&
+        x_coordinate >= 0 && x_coordinate < @width &&
+        y_coordinate >= 0 && y_coordinate < @height
     end
   end
 end
