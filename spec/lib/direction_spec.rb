@@ -6,12 +6,30 @@ RSpec.describe TableTopBot::Direction do
   subject(:direction) { described_class.new }
 
   describe '#directions' do
-    it 'returns valid Directions' do
+    it 'returns valid directions' do
       expect(direction.directions).to eq %w[NORTH EAST SOUTH WEST]
     end
   end
 
-  describe '.valid?' do
+  describe '.turn_left' do
+    it 'turns left from NORTH to WEST' do
+      expect(direction.turn_left('NORTH')).to eq('WEST')
+    end
+
+    it 'turns left from WEST to SOUTH' do
+      expect(direction.turn_left('WEST')).to eq('SOUTH')
+    end
+
+    it 'turns left from SOUTH to EAST' do
+      expect(direction.turn_left('SOUTH')).to eq('EAST')
+    end
+
+    it 'turns left from EAST to NORTH' do
+      expect(direction.turn_left('EAST')).to eq('NORTH')
+    end
+  end
+
+  describe '#valid?' do
     it 'returns true for NORTH' do
       expect(direction.valid?('NORTH')).to be true
     end
