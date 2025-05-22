@@ -1,0 +1,75 @@
+# Test basic placement and report
+PLACE 0,0,NORTH
+REPORT
+
+# Test movement
+MOVE
+REPORT
+
+# Test turning left
+LEFT
+REPORT
+
+# Test turning right (from WEST to NORTH)
+RIGHT
+REPORT
+
+# Attempt to move off the table (North edge)
+MOVE
+MOVE
+MOVE
+MOVE
+# This next move should be ignored
+MOVE
+REPORT
+
+# Attempt to move off table (East edge)
+PLACE 4,0,EAST
+MOVE
+# This next move should be ignored
+MOVE
+REPORT
+
+# Attempt to move off table (South edge)
+PLACE 0,0,SOUTH
+# This next move should be ignored
+MOVE
+REPORT
+
+# Attempt to move off table (West edge)
+PLACE 0,0,WEST
+# This next move should be ignored
+MOVE
+REPORT
+
+# Commands before a valid PLACE should be ignored
+MOVE
+LEFT
+REPORT
+PLACE 1,1,SOUTH
+REPORT
+
+# Complex sequence from problem description
+PLACE 1,2,EAST
+MOVE
+MOVE
+LEFT
+MOVE
+REPORT
+
+# Re-PLACE the robot
+PLACE 0,0,WEST
+MOVE
+REPORT
+
+# Case insensitivity for commands and directions
+place 2,2,north
+move
+report
+
+# Invalid PLACE commands (coordinates off table)
+PLACE 5,5,NORTH
+REPORT
+# Invalid PLACE commands (invalid direction)
+PLACE 0,0,UPWARDS
+REPORT

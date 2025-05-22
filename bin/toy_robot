@@ -4,7 +4,48 @@
 lib_dir = File.expand_path('../lib', __dir__)
 $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
+begin
+  require 'bundler/setup'
+rescue LoadError
+  warn 'bundler/setup not found, gem dependencies may not be loaded correctly.'
+end
+
 require 'simulator'
+require 'ui_helper'
+
+TableTopBot::UIHelper.info('=== Welcome to the Toy Robot Simulator! ===')
+TableTopBot::UIHelper.info('-------------------------------------------')
+TableTopBot::UIHelper.info('Rules:')
+TableTopBot::UIHelper.info('  - The table is 5x5 units (positions 0-4 for X and Y).')
+TableTopBot::UIHelper.info('  - The origin (0,0) is the SOUTH-WEST corner.')
+TableTopBot::UIHelper.info('  - The robot will ignore commands that would cause it to fall off the table.')
+TableTopBot::UIHelper.info('  - The first valid command must be a PLACE command.')
+TableTopBot::UIHelper.info('-------------------------------------------')
+TableTopBot::UIHelper.info('Valid Commands (case-insensitive):')
+
+TableTopBot::UIHelper.success('  PLACE X,Y,F')
+TableTopBot::UIHelper.info('    Places the robot on the table at X,Y facing direction F.')
+TableTopBot::UIHelper.info('    Example: PLACE 0,0,NORTH')
+TableTopBot::UIHelper.info('    (F can be NORTH, SOUTH, EAST, WEST)')
+
+TableTopBot::UIHelper.success('  MOVE')
+TableTopBot::UIHelper.info('    Moves the robot one unit forward in its current direction.')
+
+TableTopBot::UIHelper.success('  LEFT')
+TableTopBot::UIHelper.info('    Rotates the robot 90 degrees to the left.')
+
+TableTopBot::UIHelper.success('  RIGHT')
+TableTopBot::UIHelper.info('    Rotates the robot 90 degrees to the right.')
+
+TableTopBot::UIHelper.success('  REPORT')
+TableTopBot::UIHelper.info('    Announces the X, Y, and direction of the robot.')
+
+TableTopBot::UIHelper.success('  EXIT')
+TableTopBot::UIHelper.info('    Quits the simulator.')
+TableTopBot::UIHelper.info('-------------------------------------------')
 
 simulator = TableTopBot::Simulator.new
 simulator.run
+
+TableTopBot::UIHelper.info('-------------------------------------------')
+TableTopBot::UIHelper.success('Exiting simulator. Goodbye!')

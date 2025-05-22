@@ -3,26 +3,33 @@
 require_relative 'robot'
 require_relative 'direction'
 require_relative 'table'
+require_relative 'ui_helper'
 
 module TableTopBot
   class Simulator
     attr_reader :robot
 
-    def initialize(input_stream = $stdin, output_stream = $stdout)
+    def initialize(input_stream: $stdin, output_stream: $stdout)
       @input_stream = input_stream
       @output_stream = output_stream
       @robot = TableTopBot::Robot.new
     end
 
     def run
-      @input_stream.each_line do |line|
-        process_command(line)
+      loop do
+        line = @input_stream.gets
+        break if line.nil?
+
+        command_string = line.strip
+
+        result = process_command(command_string)
+        break if result == :exit
       end
     end
 
     def process_command(command_string)
       command_string = command_string.strip
-      return if command_string.empty? # Ignore empty lines
+      return if command_string.empty?
 
       parts = command_string.split(/\s+/, 2) # Split into command and potential arguments
       command_keyword = parts[0].upcase # Case-insensitive command
@@ -34,8 +41,10 @@ module TableTopBot
       when 'LEFT'   then handle_left_command
       when 'RIGHT'  then handle_right_command
       when 'REPORT' then handle_report_command
-        # Unknown commands are silently ignored
+      when 'EXIT'   then return :exit
+        # Unknown commands are silently ignored, returning nil implicitly
       end
+      nil # Default return for commands that don't exit
     end
 
     private
@@ -65,7 +74,7 @@ module TableTopBot
 
     def handle_report_command
       report_output = @robot.report
-      @output_stream.puts(report_output) if report_output
+      TableTopBot::UIHelper.success(report_output, stream: @output_stream) if report_output
     end
 
     def parse_place_arguments(args_str)
