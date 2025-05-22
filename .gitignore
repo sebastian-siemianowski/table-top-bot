@@ -12,6 +12,8 @@
 
 .env
 
+.idea
+
 .byebug_history
 
 ## Specific to RubyMotion:
