@@ -2,6 +2,30 @@
 
 module TableTopBot
   class Direction
-    DIRECTIONS = %w[NORTH EAST SOUTH WEST].freeze
+    attr_reader :directions
+
+    def initialize
+      @directions = ['NORTH', 'EAST', 'SOUTH', 'WEST']
+    end
+
+    def turn_left(current_direction)
+      current_index = @directions.index(current_direction)
+      return nil unless current_index
+
+      new_index = (current_index - 1 + @directions.length) % @directions.length
+      @directions[new_index]
+    end
+
+    def self.turn_right(current_direction)
+      current_index = @directions.index(current_direction)
+      return nil unless current_index # Should not happen with valid input
+
+      new_index = (current_index + 1) % @directions.length
+      @directions[new_index]
+    end
+
+    def valid?(direction)
+      @directions.include?(direction)
+    end
   end
 end
