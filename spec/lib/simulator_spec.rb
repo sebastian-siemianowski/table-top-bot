@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe TableTopBot::Simulator do
   let(:input) { StringIO.new }
   let(:output) { StringIO.new }
-  subject(:simulator) { described_class.new(input, output) }
+  subject(:simulator) { described_class.new(input_stream: input, output_stream: output) }
 
   describe '#process_command' do
     context 'with PLACE command' do
@@ -144,13 +144,13 @@ RSpec.describe TableTopBot::Simulator do
       it 'prints to output if robot is placed' do
         simulator.process_command('PLACE 1,2,SOUTH')
         simulator.process_command('REPORT')
-        expect(output.string).to eq("1,2,SOUTH\n")
+        expect(output.string).to eq("#{'1,2,SOUTH'.colorize(:green)}\n")
       end
 
       it 'prints to output for "report" (case-insensitive) if robot is placed' do
         simulator.process_command('PLACE 0,0,NORTH')
         simulator.process_command('report')
-        expect(output.string).to eq("0,0,NORTH\n")
+        expect(output.string).to eq("#{'0,0,NORTH'.colorize(:green)}\n")
       end
 
       it 'does not print to output if robot is not placed' do
@@ -189,31 +189,45 @@ RSpec.describe TableTopBot::Simulator do
         expect(output.string).to be_empty
       end
     end
+
+    context 'with EXIT command' do
+      it 'returns :exit when processing "EXIT" command' do
+        expect(simulator.process_command('EXIT')).to eq(:exit)
+      end
+
+      it 'returns :exit when processing "exit" command (case-insensitive)' do
+        expect(simulator.process_command('exit')).to eq(:exit)
+      end
+
+      it 'returns :exit when processing "Exit" command (mixed-case)' do
+        expect(simulator.process_command('Exit')).to eq(:exit)
+      end
+    end
   end
 
   describe '#run' do
     it 'processes a sequence: PLACE 0,0,NORTH; MOVE; REPORT -> 0,1,NORTH' do
       input.string = "PLACE 0,0,NORTH\nMOVE\nREPORT\n"
       simulator.run
-      expect(output.string).to eq("0,1,NORTH\n")
+      expect(output.string).to eq("#{'0,1,NORTH'.colorize(:green)}\n")
     end
 
     it 'processes a sequence: PLACE 0,0,NORTH; LEFT; REPORT -> 0,0,WEST' do
       input.string = "PLACE 0,0,NORTH\nLEFT\nREPORT\n"
       simulator.run
-      expect(output.string).to eq("0,0,WEST\n")
+      expect(output.string).to eq("#{'0,0,WEST'.colorize(:green)}\n")
     end
 
     it 'processes a sequence: PLACE 1,2,EAST; MOVE; MOVE; LEFT; MOVE; REPORT -> 3,3,NORTH' do
       input.string = "PLACE 1,2,EAST\nMOVE\nMOVE\nLEFT\nMOVE\nREPORT\n"
       simulator.run
-      expect(output.string).to eq("3,3,NORTH\n")
+      expect(output.string).to eq("#{'3,3,NORTH'.colorize(:green)}\n")
     end
 
     it 'handles commands before a valid PLACE' do
       input.string = "MOVE\nLEFT\nPLACE 0,0,NORTH\nREPORT\n"
       simulator.run
-      expect(output.string).to eq("0,0,NORTH\n")
+      expect(output.string).to eq("#{'0,0,NORTH'.colorize(:green)}\n")
     end
 
     it 'handles multiple PLACE commands and complex sequence' do
@@ -234,7 +248,12 @@ RSpec.describe TableTopBot::Simulator do
       input.string = input_str
 
       simulator.run
-      expect(output.string).to eq("0,1,NORTH\n0,0,WEST\n3,3,NORTH\n")
+      expected_output = "#{[
+        '0,1,NORTH'.colorize(:green),
+        '0,0,WEST'.colorize(:green),
+        '3,3,NORTH'.colorize(:green)
+      ].join("\n")}\n"
+      expect(output.string).to eq(expected_output)
     end
   end
 end

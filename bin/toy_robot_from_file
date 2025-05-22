@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+begin
+  require 'bundler/setup'
+rescue LoadError
+  warn 'bundler/setup not found, gem dependencies may not be loaded correctly.'
+end
+
+lib_dir = File.expand_path('../lib', __dir__)
+$LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
+
+require 'simulator'
+require 'ui_helper'
+
+filename = ARGV[0]
+
+if filename.nil?
+  default_filename = 'data/test_commands.txt'
+  TableTopBot::UIHelper.info("No filename provided. Using default input file: #{default_filename}")
+  filename = default_filename
+else
+  TableTopBot::UIHelper.info("Using provided filename: #{filename}")
+end
+
+unless File.exist?(filename)
+  TableTopBot::UIHelper.error("Error: File not found - #{filename}")
+  exit 1
+end
+
+begin
+  TableTopBot::UIHelper.info("Processing commands from #{filename}...")
+  File.open(filename, 'r') do |file|
+    simulator = TableTopBot::Simulator.new(input_stream: file)
+    simulator.run
+  end
+  TableTopBot::UIHelper.success("Finished processing #{filename}.")
+rescue SystemCallError => e
+  TableTopBot::UIHelper.error("Error processing file #{filename}: #{e.message}")
+  exit 1
+rescue StandardError => e
+  TableTopBot::UIHelper.error("An unexpected error occurred while processing #{filename}: #{e.message}")
+  exit 1
+end
